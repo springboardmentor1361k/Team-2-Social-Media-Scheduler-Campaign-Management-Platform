@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.db.database import get_db
@@ -16,12 +16,20 @@ router = APIRouter(
 )
 
 
-@router.post("/", response_model=SocialAccountResponse)
+@router.post(
+    "/",
+    response_model=SocialAccountResponse,
+    status_code=status.HTTP_201_CREATED
+)
 def create_social_account(
     account: SocialAccountCreate,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
+    """
+    Create a new social account for the authenticated user.
+    """
+
     new_account = SocialAccount(
         user_id=current_user.id,
         platform_name=account.platform_name,
@@ -40,6 +48,10 @@ def get_social_accounts(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
+    """
+    Retrieve all social accounts for the authenticated user.
+    """
+
     return (
         db.query(SocialAccount)
         .filter(SocialAccount.user_id == current_user.id)
@@ -53,6 +65,10 @@ def delete_social_account(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
+    """
+    Delete a social account belonging to the authenticated user.
+    """
+
     account = (
         db.query(SocialAccount)
         .filter(
@@ -71,4 +87,6 @@ def delete_social_account(
     db.delete(account)
     db.commit()
 
-    return {"message": "Social account deleted successfully"}
+    return {
+        "message": "Social account deleted successfully"
+    }

@@ -18,7 +18,13 @@ router = APIRouter(
 )
 
 
-@router.post("/register")
+# -------------------------------
+# Register User
+# -------------------------------
+@router.post(
+    "/register",
+    status_code=status.HTTP_201_CREATED
+)
 def register_user(
     user: UserRegister,
     db: Session = Depends(get_db)
@@ -66,6 +72,9 @@ def register_user(
     }
 
 
+# -------------------------------
+# Login User
+# -------------------------------
 @router.post("/login", response_model=Token)
 def login(
     form_data: OAuth2PasswordRequestForm = Depends(),

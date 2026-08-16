@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.db.database import get_db
@@ -17,12 +17,26 @@ router = APIRouter(
 )
 
 
-@router.post("/", response_model=CampaignResponse)
+@router.post(
+    "/",
+    response_model=CampaignResponse,
+    status_code=status.HTTP_201_CREATED
+)
 def create_campaign(
     campaign: CampaignCreate,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
+    """
+    Create a new campaign for the authenticated user.
+    """
+
+    # Validate dates
+    if campaign.end_date < campaign.start_date:
+        raise HTTPException(
+            status_code=400,
+            detail="End date cannot be earlier than start date."
+        )
 
     new_campaign = Campaign(
         campaign_name=campaign.campaign_name,
@@ -43,6 +57,9 @@ def get_campaigns(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
+    """
+    Get all campaigns of the authenticated user.
+    """
 
     return (
         db.query(Campaign)
@@ -57,6 +74,9 @@ def get_campaign(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
+    """
+    Get a campaign by ID.
+    """
 
     campaign = (
         db.query(Campaign)
@@ -68,7 +88,10 @@ def get_campaign(
     )
 
     if not campaign:
-        raise HTTPException(404, "Campaign not found")
+        raise HTTPException(
+            status_code=404,
+            detail="Campaign not found"
+        )
 
     return campaign
 
@@ -80,6 +103,9 @@ def update_campaign(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
+    """
+    Update an existing campaign.
+    """
 
     campaign = (
         db.query(Campaign)
@@ -91,7 +117,17 @@ def update_campaign(
     )
 
     if not campaign:
-        raise HTTPException(404, "Campaign not found")
+        raise HTTPException(
+            status_code=404,
+            detail="Campaign not found"
+        )
+
+    # Validate dates
+    if campaign_data.end_date < campaign_data.start_date:
+        raise HTTPException(
+            status_code=400,
+            detail="End date cannot be earlier than start date."
+        )
 
     campaign.campaign_name = campaign_data.campaign_name
     campaign.start_date = campaign_data.start_date
@@ -109,6 +145,9 @@ def delete_campaign(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
+    """
+    Delete a campaign.
+    """
 
     campaign = (
         db.query(Campaign)
@@ -120,7 +159,10 @@ def delete_campaign(
     )
 
     if not campaign:
-        raise HTTPException(404, "Campaign not found")
+        raise HTTPException(
+            status_code=404,
+            detail="Campaign not found"
+        )
 
     db.delete(campaign)
     db.commit()

@@ -1,41 +1,61 @@
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config, pool
+from sqlalchemy import engine_from_config
+from sqlalchemy import pool
+
 from alembic import context
 
-from app.core.config import DATABASE_URL
 from app.db.database import Base
+from app.core.config import DATABASE_URL
 
-# Import all models
-from app.models import Organization, User, TeamInvite
+# Import all models so Alembic can detect them
+from app.models import (
+    User,
+    SocialAccount,
+    Campaign,
+    Post,
+)
 
+# Alembic Config object
 config = context.config
 
-# Read database URL from .env
-config.set_main_option("sqlalchemy.url", DATABASE_URL)
+# Set database URL from application configuration
+config.set_main_option(
+    "sqlalchemy.url",
+    DATABASE_URL.replace("%", "%%")
+)
 
 # Configure logging
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
+# Metadata for autogenerate
 target_metadata = Base.metadata
 
 
-def run_migrations_offline():
+def run_migrations_offline() -> None:
+    """
+    Run migrations in offline mode.
+    """
     url = config.get_main_option("sqlalchemy.url")
 
     context.configure(
         url=url,
         target_metadata=target_metadata,
         literal_binds=True,
-        dialect_opts={"paramstyle": "named"},
+        dialect_opts={
+            "paramstyle": "named"
+        },
     )
 
     with context.begin_transaction():
         context.run_migrations()
 
 
-def run_migrations_online():
+def run_migrations_online() -> None:
+    """
+    Run migrations in online mode.
+    """
     connectable = engine_from_config(
         config.get_section(config.config_ini_section),
         prefix="sqlalchemy.",
