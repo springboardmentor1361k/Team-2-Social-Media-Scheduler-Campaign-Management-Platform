@@ -22,9 +22,16 @@ def create_post(post: PostCreate, db: Session = Depends(get_db)):
     new_post = Post(
         title=post.title,
         content=post.content,
+        media_url=post.media_url,
         platform=post.platform,
         schedule_time=post.schedule_time,
-        status="Pending"
+        status="Pending",
+
+        is_draft=post.is_draft,
+        is_recurring=post.is_recurring,
+        recurring_type=post.recurring_type,
+
+        campaign_id=post.campaign_id
     )
 
     db.add(new_post)
@@ -35,10 +42,6 @@ def create_post(post: PostCreate, db: Session = Depends(get_db)):
         "message": "Post created successfully",
         "post": new_post
     }
-@router.get("/")
-def get_posts(db: Session = Depends(get_db)):
-    posts = db.query(Post).all()
-    return posts
 
 
 # GET ALL POSTS
@@ -50,7 +53,11 @@ def get_posts(db: Session = Depends(get_db)):
 
 # UPDATE POST
 @router.put("/{post_id}")
-def update_post(post_id: int, post: PostCreate, db: Session = Depends(get_db)):
+def update_post(
+    post_id: int,
+    post: PostCreate,
+    db: Session = Depends(get_db)
+):
     db_post = db.query(Post).filter(Post.id == post_id).first()
 
     if not db_post:
@@ -58,8 +65,15 @@ def update_post(post_id: int, post: PostCreate, db: Session = Depends(get_db)):
 
     db_post.title = post.title
     db_post.content = post.content
+    db_post.media_url = post.media_url
     db_post.platform = post.platform
     db_post.schedule_time = post.schedule_time
+
+    db_post.is_draft = post.is_draft
+    db_post.is_recurring = post.is_recurring
+    db_post.recurring_type = post.recurring_type
+
+    db_post.campaign_id = post.campaign_id
 
     db.commit()
     db.refresh(db_post)

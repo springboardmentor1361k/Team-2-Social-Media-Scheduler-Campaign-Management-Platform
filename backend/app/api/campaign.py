@@ -76,3 +76,64 @@ def delete_campaign(id: int, db: Session = Depends(get_db)):
     return {
         "message": "Campaign deleted successfully"
     }
+
+
+# CAMPAIGN TRACKING
+@router.get("/campaign/{id}/tracking")
+def campaign_tracking(id: int, db: Session = Depends(get_db)):
+    campaign = db.query(Campaign).filter(Campaign.id == id).first()
+
+    if not campaign:
+        return {"error": "Campaign not found"}
+
+    total_posts = len(campaign.posts)
+
+    published_posts = len(
+        [post for post in campaign.posts if post.status == "Published"]
+    )
+
+    pending_posts = len(
+        [post for post in campaign.posts if post.status == "Pending"]
+    )
+
+    return {
+        "campaign_id": campaign.id,
+        "campaign_name": campaign.campaign_name,
+        "platform": campaign.platform,
+        "total_posts": total_posts,
+        "published_posts": published_posts,
+        "pending_posts": pending_posts,
+        "status": "Running" if pending_posts > 0 else "Completed"
+    }
+
+
+# CAMPAIGN REPORT
+@router.get("/campaign/{id}/report")
+def campaign_report(id: int, db: Session = Depends(get_db)):
+    campaign = db.query(Campaign).filter(Campaign.id == id).first()
+
+    if not campaign:
+        return {"error": "Campaign not found"}
+
+    total_posts = len(campaign.posts)
+
+    published_posts = len(
+        [post for post in campaign.posts if post.status == "Published"]
+    )
+
+    pending_posts = len(
+        [post for post in campaign.posts if post.status == "Pending"]
+    )
+
+    return {
+        "campaign_id": campaign.id,
+        "campaign_name": campaign.campaign_name,
+        "platform": campaign.platform,
+        "budget": campaign.budget,
+        "start_date": campaign.start_date,
+        "end_date": campaign.end_date,
+        "total_posts": total_posts,
+        "published_posts": published_posts,
+        "pending_posts": pending_posts,
+        "status": campaign.status
+    }

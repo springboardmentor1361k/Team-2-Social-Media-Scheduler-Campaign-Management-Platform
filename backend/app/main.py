@@ -1,10 +1,14 @@
 from fastapi import FastAPI
 from scheduler import start_scheduler
 from database import Base, engine
+from api import analytics
+from api import logs
 
 import models.post
 import models.campaign
 import models.notification
+import models.publishing_log
+
 
 from api import schedule, campaign, post
 
@@ -26,6 +30,8 @@ Base.metadata.create_all(bind=engine)
 app.include_router(schedule.router)
 app.include_router(campaign.router)
 app.include_router(post.router)
+app.include_router(analytics.router)
+app.include_router(logs.router)
 
 
 @app.get("/")
