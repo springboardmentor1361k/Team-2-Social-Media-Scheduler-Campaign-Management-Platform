@@ -1,64 +1,169 @@
-# SocialPilot
-Social Media Scheduler &amp; Campaign Management Platform
+# Social Media Scheduler & Campaign Management Platform
 
-# SocialPilot - Frontend
+A web-based Social Media Scheduler and Campaign Management Platform developed as part of the Infosys Virtual Internship.
 
-SocialPilot is a comprehensive Social Media Scheduler & Campaign Management Platform. This repository contains the frontend implementation built with Next.js 16 and Tailwind CSS.
-# Features
+The platform is designed to help users manage social media accounts, create and schedule posts, organize campaigns, track campaign performance, and generate useful analytics and reports from a centralized platform.
 
-    Authentication: Complete user flows for Login, Register, Forgot Password, and Reset Password.
+---
 
-    State Management: Global authentication state managed via AuthProvider.
+## 📌 Project Overview
 
-    Architecture: Clean folder structure using src/app/(auth) for authentication routes.
+Managing multiple social media platforms manually can be time-consuming and difficult to organize. This project aims to provide a centralized platform where users can manage their social media activities from a single application.
 
-    Performance: Optimized with Next.js Turbopack and font-optimized via next/font.
+The system combines:
 
-# Tech Stack
+- User authentication and account management
+- Social media account management
+- Post creation and management
+- Post scheduling
+- Campaign management
+- Campaign tracking
+- Analytics and reporting
+- Database management
+- Testing and deployment
 
-    Framework: Next.js (App Router)
+The project is developed collaboratively by a team of seven members, with each member responsible for a specific technical area.
 
-    Language: JavaScript (with TypeScript-based path aliases)
+---
 
-    Styling: Tailwind CSS
+## 🎯 Objectives
 
-    Fonts: Poppins (Google Fonts)
+The main objectives of this project are:
 
-# Getting Started
-    1. Prerequisites
+- Build a centralized social media management platform.
+- Allow users to manage social media accounts.
+- Provide functionality for creating and managing posts.
+- Schedule posts for future publishing.
+- Organize social media activities into campaigns.
+- Track campaign performance and engagement.
+- Generate campaign and performance reports.
+- Provide analytics through dashboards.
+- Implement secure user authentication.
+- Maintain a structured and scalable backend and database.
+- Follow collaborative GitHub-based development practices.
 
-    Ensure you have Node.js installed (v18 or higher recommended).
-    2. Installation
-    Bash
+---
 
-# Clone the repository
-    git clone https://github.com/Prathiba-hub/SocialPilot.git
+## ✨ Key Features
 
-# Navigate to the frontend directory
-    cd SocialPilot
+### 👤 User Authentication & Management
 
-# Install dependencies
-    npm install
+- User registration
+- User login
+- Secure authentication
+- User account management
+- Protected application resources
+- User-specific data management
 
-# Environment Variables
+### 📱 Social Media Account Management
 
-    Create a .env.local file in the root directory and add the following:
-    Code snippet
+- Connect social media accounts
+- Manage connected accounts
+- Store account-related information
+- Manage account associations with posts and campaigns
 
-    NEXT_PUBLIC_API_URL=your_api_url_here
+### 📝 Post Management
 
-# Running the Development Server
-    Bash
+- Create posts
+- Edit posts
+- Delete posts
+- Manage post content
+- Associate posts with social media accounts
+- Track post status
 
-    npm run dev
+### 📅 Post Scheduling
 
-    Open http://localhost:3000 in your browser.
-    📂 Project Structure
+- Schedule posts for future publication
+- Manage scheduled posts
+- Track scheduled post status
+- Support campaign-based scheduling
 
-        src/app/(auth): Authentication pages (Login, Register, etc.)
+### 📢 Campaign Management
 
-        src/context: React Context Providers for global state.
+- Create campaigns
+- Update campaigns
+- Delete campaigns
+- Manage campaign details
+- Associate posts with campaigns
+- Track campaign progress
 
-        src/components: Reusable UI components.
+### 📊 Campaign Tracking
 
-        src/lib: Utility functions and shared libraries.
+- Monitor campaign activities
+- Track post performance
+- Track engagement
+- Analyze campaign results
+- Compare campaign performance
+
+### 📈 Analytics
+
+- Engagement analytics
+- Audience growth tracking
+- Campaign performance analysis
+- Social media performance metrics
+- Campaign comparison
+- ROI-related reporting
+
+### 📄 Reports
+
+- Campaign reports
+- Performance reports
+- Audience growth reports
+- Engagement reports
+- Campaign comparison reports
+- ROI reports
+
+### 📊 Analytics Dashboard
+
+The platform can provide interactive dashboards for visualizing:
+
+- Campaign performance
+- Engagement metrics
+- Audience growth
+- Post performance
+- Campaign comparisons
+- Overall social media activity
+
+---
+
+# 🏗️ Project Architecture
+
+The project follows a modular architecture consisting of frontend, backend, database, and testing components.
+
+```text
+                    ┌─────────────────────┐
+                    │        User         │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │      Frontend       │
+                    │      UI / UX        │
+                    └──────────┬──────────┘
+                               │
+                         API Requests
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │       Backend       │
+                    │   REST API Layer    │
+                    └──────────┬──────────┘
+                               │
+              ┌────────────────┼────────────────┐
+              │                │                │
+              ▼                ▼                ▼
+       Authentication     Campaigns         Scheduling
+              │                │                │
+              └────────────────┼────────────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │      Database       │
+                    │ Users / Posts /     │
+                    │ Campaigns / Accounts│
+                    └─────────────────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │ Analytics & Reports │
+                    └─────────────────────┘
